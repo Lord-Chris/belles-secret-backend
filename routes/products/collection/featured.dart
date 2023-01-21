@@ -5,7 +5,10 @@ import 'package:frog_start/models/success_response.dart';
 Response onRequest(RequestContext context) {
   return Response.json(
     body: AppResponse.success(
-      data: {'collections': List.filled(10, CollectionModel.random().toMap())},
+      data: {
+        'collections':
+            List.generate(10, (_) => CollectionModel.random().toMap())
+      },
     ).toSuccessMap(),
   );
 }

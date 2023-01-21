@@ -7,8 +7,6 @@ import 'package:frog_start/constants.dart';
 import 'package:frog_start/extensions/string_extension.dart';
 import 'package:uuid/uuid.dart';
 
-final collectionSuffix = ['Care', 'Hair', 'Face Care'];
-
 class CollectionModel {
   const CollectionModel({
     required this.id,
@@ -24,7 +22,7 @@ class CollectionModel {
     final timestamp = DateTime.now();
     return CollectionModel(
       id: const Uuid().v4(),
-      name: '${chance.word().capitalize()} ${(collectionSuffix..shuffle())[0]}',
+      name: '${chance.word().capitalize()} ${AppConstants.cSuffix}',
       cover: AppConstants.mockImage,
       createdAt: timestamp,
       updatedAt: timestamp,
