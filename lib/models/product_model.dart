@@ -84,3 +84,5 @@ class ProductModel {
 
   String toJson() => json.encode(toMap());
 }
+
+final productList = List.generate(1000, (_) => ProductModel.random());
