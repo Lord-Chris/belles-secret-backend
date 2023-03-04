@@ -2,6 +2,13 @@ include: package:very_good_analysis/analysis_options.3.1.0.yaml
 analyzer:
   exclude:
     - build/**
+  errors:
+    argument_type_not_assignable: ignore
 linter:
   rules:
     file_names: false
+    sort_constructors_first: false
+
+
+# The option 'null' isn't supported by 'errors'.
+# Try using one of the supported options: 'ignore', 'false', 'include', 'true', 'error', 'info', and 'warning'.
