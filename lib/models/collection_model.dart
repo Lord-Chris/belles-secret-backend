@@ -68,3 +68,5 @@ class CollectionModel {
 
   String toJson() => json.encode(toMap());
 }
+
+final collectionList = List.generate(1000, (_) => CollectionModel.random());

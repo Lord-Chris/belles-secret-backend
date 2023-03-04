@@ -7,7 +7,7 @@ Response onRequest(RequestContext context) {
     body: AppResponse.success(
       data: {
         'collections':
-            List.generate(10, (_) => CollectionModel.random().toMap())
+            (collectionList..shuffle()).take(15).map((e) => e.toMap()).toList(),
       },
     ).toMap(),
   );

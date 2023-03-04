@@ -6,7 +6,8 @@ Response onRequest(RequestContext context) {
   return Response.json(
     body: AppResponse.success(
       data: {
-        'products': List.generate(10, (_) => ProductModel.random().toMap())
+        'products':
+            (productList..shuffle()).take(15).map((e) => e.toMap()).toList(),
       },
     ).toMap(),
   );

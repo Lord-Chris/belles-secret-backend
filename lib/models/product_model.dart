@@ -45,10 +45,10 @@ class ProductModel {
     final timestamp = DateTime.now();
     return ProductModel(
       id: const Uuid().v4(),
-      categoryId: CategoryModel.random().id,
+      categoryId: categoryList[(chance.natural(max: categoryList.length))].id,
       name: '${chance.word().capitalize()} ${AppConstants.pSuffix}',
       image: AppConstants.mockImage,
-      collection: CollectionModel.random(),
+      collection: collectionList[(chance.natural(max: collectionList.length))],
       price: chance.integer(max: 10000),
       discount: chance.boolean() ? null : chance.integer(max: 40),
       createdAt: timestamp,

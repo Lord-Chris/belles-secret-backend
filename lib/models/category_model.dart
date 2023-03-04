@@ -39,3 +39,5 @@ class CategoryModel {
   factory CategoryModel.fromJson(String source) =>
       CategoryModel.fromMap(json.decode(source));
 }
+
+final categoryList = List.generate(1000, (_) => CategoryModel.random());
