@@ -23,21 +23,32 @@ class AppResponse {
   final String? message;
   final Map<String, dynamic>? data;
 
-  Map<String, dynamic> toSuccessMap() {
+  Map<String, dynamic> toMap() {
+    switch (status) {
+      case 'success':
+        return _toSuccessMap();
+      case 'fail':
+        return _toFailureMap();
+      default:
+        return _toErrorMap();
+    }
+  }
+
+  Map<String, dynamic> _toSuccessMap() {
     return {
       'status': status,
       'data': data,
     };
   }
 
-  Map<String, dynamic> toFailureMap() {
+  Map<String, dynamic> _toFailureMap() {
     return {
       'status': status,
       'data': data,
     };
   }
 
-  Map<String, dynamic> toErrorMap() {
+  Map<String, dynamic> _toErrorMap() {
     return {
       'status': status,
       if (message != null) 'message': message,
