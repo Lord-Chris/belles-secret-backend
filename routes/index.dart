@@ -7,6 +7,13 @@ Response onRequest(RequestContext context) {
 
 /// TODO: 
 /// 1. New Arrivals product ✅
-/// 2. Search product
+/// 2. Search product ✅
 /// 3. Get Wishlist
 /// 4. Fix analysis-options
+/// 5. Add error catchers - for content type
+
+
+
+
+/// Chance-dart suggestions.
+/// 1. Email generator.
