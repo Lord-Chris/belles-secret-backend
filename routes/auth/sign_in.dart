@@ -10,13 +10,12 @@ Future<Response> onRequest(RequestContext context) async {
 
   final data = LoginModel.fromMap(jsonDecode(body));
 
-  return Response(
+  return Response.json(
     body: AppResponse.success(
       data: UserModel.random().toMap(),
-    ),
+    ).toMap(),
   );
 }
-
 
 Handler middleware(Handler handler) {
   return handler.use(provider<String>((context) => 'Welcome to Dart Frog!'));
