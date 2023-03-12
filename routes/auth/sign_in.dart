@@ -16,3 +16,8 @@ Future<Response> onRequest(RequestContext context) async {
     ),
   );
 }
+
+
+Handler middleware(Handler handler) {
+  return handler.use(provider<String>((context) => 'Welcome to Dart Frog!'));
+}

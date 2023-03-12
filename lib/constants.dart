@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:chance_dart/chance_dart.dart';
+import 'package:frog_start/utils/token_util.dart';
 
 class AppConstants {
   AppConstants._();
@@ -23,4 +24,6 @@ class AppConstants {
   static String get pSuffix {
     return _productSuffix.elementAt(natural(max: _productSuffix.length));
   }
+
+  static final secretKey = TokenUtil.createSecretKey();
 }
