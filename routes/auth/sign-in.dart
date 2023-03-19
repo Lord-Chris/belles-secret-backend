@@ -20,19 +20,20 @@ Future<Response> onRequest(RequestContext context) async {
       case HttpMethod.options:
       case HttpMethod.patch:
       case HttpMethod.put:
-        return _methodNotAllowed();
+        return _methodNotAllowed(context);
     }
-  } on Exception {
+  } on Exception catch (e) {
     return AppRes.fail(
-      statusCode: HttpStatus.internalServerError,
       headers: context.request.headers,
+      data: {'error': e.toString()},
     );
   }
 }
 
-Response _methodNotAllowed() {
+Response _methodNotAllowed(RequestContext context) {
   return AppRes.error(
     statusCode: HttpStatus.methodNotAllowed,
+    headers: context.request.headers,
     message: 'Method not Allowed',
   );
 }
@@ -41,32 +42,42 @@ Future<Response> _post(RequestContext context) async {
   final body = await context.request.json() as Map<String, dynamic>;
 
   if (body.isEmpty) {
-    return Response.json(
-      statusCode: HttpStatus.badRequest,
-      body: {'error': 'Email and password is missing'},
+    return AppRes.error(
+      headers: context.request.headers,
+      message: 'Email and password is missing',
     );
   }
 
   final data = LoginModel.fromMap(body);
   if (context.validateEmail(data.email) != null) {
-    return Response.json(
+    return AppRes.error(
       statusCode: HttpStatus.unprocessableEntity,
-      body: {'error': 'Invalid Email'},
+      headers: context.request.headers,
+      message: 'Invalid Email',
     );
   }
 
   if (context.validatePassword(data.password) != null) {
-    return Response.json(
+    return AppRes.error(
       statusCode: HttpStatus.unprocessableEntity,
-      body: {'error': context.validatePassword(data.password)},
+      headers: context.request.headers,
+      message: context.validatePassword(data.password),
     );
   }
 
   final user = context.read<UserRepository>().getUserByEmail(data.email);
-
-  if (user == null || user.password != CryptUtil.hashPassword(data.password)) {
+  if (user == null) {
     return AppRes.error(
       statusCode: HttpStatus.notFound,
+      headers: context.request.headers,
+      message: 'No account exists with this account',
+    );
+  }
+
+  if (user.password != CryptUtil.hashPassword(data.password)) {
+    return AppRes.error(
+      statusCode: HttpStatus.notFound,
+      headers: context.request.headers,
       message: 'Invalid Login Credentials',
     );
   }

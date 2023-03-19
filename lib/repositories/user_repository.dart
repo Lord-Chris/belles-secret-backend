@@ -1,9 +1,5 @@
 // ignore_for_file: public_member_api_docs, only_throw_errors
 
-import 'dart:io';
-
-import 'package:dart_frog/dart_frog.dart';
-import 'package:frog_start/models/app_response.dart';
 import 'package:frog_start/models/user_model.dart';
 
 class UserRepository {
@@ -11,13 +7,6 @@ class UserRepository {
 
   UserModel createUser(UserModel user) {
     // users.clear();
-    if (getUserByEmail(user.email) != null) {
-      throw Response.json(
-        statusCode: HttpStatus.notFound,
-        body: AppResponse.error('An account exists with this account already')
-            .toMap(),
-      );
-    }
     users.add(user);
     return user;
   }

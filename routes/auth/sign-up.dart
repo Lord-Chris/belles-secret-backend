@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:frog_start/constants.dart';
+import 'package:frog_start/extensions/validator_extension.dart';
 import 'package:frog_start/models/app_response.dart';
 import 'package:frog_start/models/user_model.dart';
 import 'package:frog_start/repositories/user_repository.dart';
@@ -20,10 +21,10 @@ Future<Response> onRequest(RequestContext context) async {
       case HttpMethod.put:
         return _methodNotAllowed(context);
     }
-  } on Exception {
+  } on Exception catch (e) {
     return AppRes.fail(
-      statusCode: HttpStatus.internalServerError,
       headers: context.request.headers,
+      data: {'error': e.toString()},
     );
   }
 }
@@ -37,17 +38,47 @@ Response _methodNotAllowed(RequestContext context) {
 }
 
 Future<Response> _post(RequestContext context) async {
-  final body = await context.request.json();
+  final body = await context.request.json() as Map<String, dynamic>;
+  final userRepo = context.read<UserRepository>();
+  if (body.isEmpty) {
+    return AppRes.error(
+      headers: context.request.headers,
+      message: 'Email and password is missing',
+    );
+  }
   final user = UserModel.initial(body);
 
-  context.read<UserRepository>().createUser(user);
+  if (context.validateEmail(user.email) != null) {
+    return AppRes.error(
+      statusCode: HttpStatus.unprocessableEntity,
+      headers: context.request.headers,
+      message: 'Invalid Email',
+    );
+  }
 
-  return Response.json(
-    body: AppResponse.success(
-      data: {
-        'token': TokenUtil.createToken(user.id, AppConstants.secretKey),
-        'user': user.toMap(),
-      },
-    ).toMap(),
+  if (context.validatePassword(user.password) != null) {
+    return AppRes.error(
+      statusCode: HttpStatus.unprocessableEntity,
+      headers: context.request.headers,
+      message: context.validatePassword(user.password),
+    );
+  }
+
+  if (userRepo.getUserByEmail(user.email) != null) {
+    return AppRes.error(
+      headers: context.request.headers,
+      message: 'An Account exists with this account',
+    );
+  }
+
+  userRepo.createUser(user);
+
+  return AppRes.success(
+    statusCode: HttpStatus.created,
+    headers: context.request.headers,
+    data: {
+      'token': TokenUtil.createToken(user.id, AppConstants.secretKey),
+      'user': user.toMap(),
+    },
   );
 }
