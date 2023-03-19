@@ -14,7 +14,7 @@ Handler middleware(Handler handler) {
 /// 2. Search product ✅
 /// 3. Get Wishlist ✅
 /// 4. Fix analysis-options
-/// 5. Add error catchers - for content type
+/// 5. Add error catchers - for content type 
 
 
 

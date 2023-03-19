@@ -39,8 +39,16 @@ Response _methodNotAllowed(RequestContext context) {
 }
 
 Future<Response> _post(RequestContext context) async {
-  final body = await context.request.json() as Map<String, dynamic>;
-
+  late Map<String, dynamic> body;
+  try {
+    body = await context.request.json() as Map<String, dynamic>;
+  } catch (e) {
+    return AppRes.error(
+      statusCode: HttpStatus.unsupportedMediaType,
+      headers: context.request.headers,
+      message: 'The request payload must be in JSON format',
+    );
+  }
   if (body.isEmpty) {
     return AppRes.error(
       headers: context.request.headers,
