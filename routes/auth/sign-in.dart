@@ -22,19 +22,18 @@ Future<Response> onRequest(RequestContext context) async {
       case HttpMethod.put:
         return _methodNotAllowed();
     }
-  } on Exception catch (e) {
-    return Response.json(
+  } on Exception {
+    return AppRes.fail(
       statusCode: HttpStatus.internalServerError,
       headers: context.request.headers,
-      body: {'error': e.toString()},
     );
   }
 }
 
 Response _methodNotAllowed() {
-  return Response.json(
+  return AppRes.error(
     statusCode: HttpStatus.methodNotAllowed,
-    body: {'error': 'Method not Allowed'},
+    message: 'Method not Allowed',
   );
 }
 
@@ -66,18 +65,17 @@ Future<Response> _post(RequestContext context) async {
   final user = context.read<UserRepository>().getUserByEmail(data.email);
 
   if (user == null || user.password != CryptUtil.hashPassword(data.password)) {
-    return Response.json(
+    return AppRes.error(
       statusCode: HttpStatus.notFound,
-      body: AppResponse.error('Invalid Login Credentials').toMap(),
+      message: 'Invalid Login Credentials',
     );
   }
 
-  return Response.json(
-    body: AppResponse.success(
-      data: {
-        'token': TokenUtil.createToken(user.id, AppConstants.secretKey),
-        'user': user.toMap(),
-      },
-    ).toMap(),
+  return AppRes.success(
+    headers: context.request.headers,
+    data: {
+      'token': TokenUtil.createToken(user.id, AppConstants.secretKey),
+      'user': user.toMap(),
+    },
   );
 }
