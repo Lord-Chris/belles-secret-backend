@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:io';
+
 import 'package:dart_frog/dart_frog.dart';
 
 class AppRes extends Response {
@@ -30,7 +32,7 @@ class AppRes extends Response {
   /// This is called when an API call is rejected due to invalid data or call
   /// conditions
   static Response error({
-    int? statusCode,
+    int statusCode = HttpStatus.badRequest,
     Map<String, Object>? headers,
     String? message,
   }) {
@@ -44,7 +46,7 @@ class AppRes extends Response {
 
   /// This is called when an API call is rejected due to an error on the server.
   static Response fail({
-    int? statusCode,
+    int statusCode = HttpStatus.internalServerError,
     Map<String, Object>? headers,
     Map<String, dynamic>? data,
   }) {
@@ -58,7 +60,7 @@ class AppRes extends Response {
 
   /// This is called on success cases
   static Response success({
-    int? statusCode,
+    int statusCode = HttpStatus.ok,
     Map<String, Object>? headers,
     Map<String, dynamic>? data,
   }) {
