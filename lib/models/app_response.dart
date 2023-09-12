@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 
 class AppRes extends Response {
-  final String status;
+  final bool status;
   final String? message;
   final Map<String, dynamic>? data;
 
@@ -37,7 +37,7 @@ class AppRes extends Response {
     String? message,
   }) {
     return AppRes(
-      status: 'error',
+      status: false,
       statusCode: statusCode,
       headers: headers,
       message: message,
@@ -51,7 +51,7 @@ class AppRes extends Response {
     Map<String, dynamic>? data,
   }) {
     return AppRes(
-      status: 'fail',
+      status: false,
       statusCode: statusCode,
       headers: headers,
       data: data,
@@ -65,7 +65,7 @@ class AppRes extends Response {
     Map<String, dynamic>? data,
   }) {
     return AppRes(
-      status: 'success',
+      status: true,
       statusCode: statusCode,
       headers: headers,
       data: data,
